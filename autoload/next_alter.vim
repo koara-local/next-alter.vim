@@ -34,6 +34,10 @@ let g:next_alter#pair_extension = get(g:, 'next_alter#pair_extension', s:default
 let g:next_alter#search_dir = get(g:, 'next_alter#search_dir', s:default_search_dir)
 let g:next_alter#open_option = get(g:, 'next_alter#open_option', '')
 
+let s:create_pair_extension = 1
+if exists("g:next_alter#do_not_create_not_exist_pair_extension")
+  let s:create_pair_extension = 0
+endif
 
 " returns current file infomation in dictionary.
 function! s:get_current_file_info()
@@ -149,6 +153,11 @@ function! s:open(is_expmap)
     if target == ''
         let target = alter_file_paths[0]
         let f = 1
+    endif
+
+    if f == 1 && s:create_pair_extension == 0
+        echomsg 'pair extension file is not exist.'
+        return
     endif
 
     if a:is_expmap == 0
